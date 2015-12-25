@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Scala notes</title>
+    <meta charset="utf-8">
+    <style>
+      @import url(https://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+      @import url(https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+      @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
+
+      body { font-family: 'Droid Serif'; }
+      h1, h2, h3 {
+        font-family: 'Yanone Kaffeesatz';
+        font-weight: normal;
+      }
+      .remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
+    </style>
+  </head>
+  <body>
+    <textarea id="source">
+
+class: center, middle
+
+# Scala
+
+---
+
+# Topics
+
+1. What is Scala
+2. What makes it scalable?
+3. Why use it?
+
+---
+
+# What is Scala
+
+* Scala stands for "Scalable language"
+* pronounced skah-lah
+* runs on Java platform, can harness Java components
+* is a blend of object-oriented and functional programming concepts
+* statically-typed
+* leads to legible, concise, malleable code
+* uses the idea of "mix-ins" where you can blend "traits"
+* more "bazaar" than "cathedral" (more bendable to the will of the programmer)
+* allows you to create your own classes that feel like built-in
+* you can design and implement abstractions in Scala that address radically new application domains, yet still feel like native language support
+* has cherry picked and rolled together the best bits of many programming languages
+* has also innovated in terms of generic types, traits, extractors (pattern matching)
+---
+
+# What makes Scala scalable?
+
+* object-oriented and functional intertwined
+* objects and functions are unified: in Scala a function value *is* an object
+* function types are classes that can be inherited by subclasses
+* purely object-oriented
+* full blown-functional language
+
+---
+
+## Purely object-oriented language
+
+* every value is an object and every operation is a method call
+* different aspects of classes can be encapsulated in different *traits*
+* *mixin composition*: takes members of a class and adds the members of a number of traits to them (avoids classical diamond inheritance problem of multiple inheritance)
+
+---
+
+## A full-blown functional language 
+  * functions are first-class values - you can pass around functions as arguments or returns, and you can have anonymous functions (called *function literals*). This can lead to new control structures and greater expressiveness (legible and concise). Much more powerful than function pointers of C/C++
+  * operations map input values to output values, rather than change data in place (immutable data structures). Methods should not have any *side effects*. *Referentially transparent*: for any given input the method call could be replaced by its result without affecting the programs semantics. Scala allows you to write in imperive (mutable, side effects style), but encourages immutable data structures and referentially transparent methods.
+
+---
+
+# Why Scala?
+
+* compatible
+* brevity
+* high-level abstractions
+* advanced static-typing
+
+---
+
+## Compatible
+
+* add value to existing Java code
+* compile to JVM bytecode
+* run-time performance similar to Java
+* can call Java
+* heavily re-uses Java types and dresses them up to make them nicer
+* Scala can be invoked from Java code (with encoding)
+
+---
+
+## Brevity 
+
+* more concise than Java by a factor of 10
+* avoids Java boilerplate cruft
+* semi-colons are optional
+* gives you many tools to define powerful libraries that let you capture and factor out common behavior (e.g. by defining traits)
+* library methods can be parameterized with operations, which lets you define constructs that are, in effect, your own control structures
+
+---
+
+## High-level abstractions 
+
+* helps you manage complexity by letting you raise the level of abstraction in the interfaces you design and use (e.g. querying a string with predicates like the function literal _.isUpperCase)
+* offers high level *reasoning principles* for programming. 
+
+*Referential integrity* allows you to freely exchnage a function application with the function body without worrying about hidden side-effects
+  - 'exists' refactoring example -- querying the same sequence with two predicates and or-ing the results is the same as querying with a single predicate that tests at the same time for predicate1 and predicate2: `sequence.exists(predicate1) || sequence.exists(predicate2) == sequence.exists(x => predicate1(x) || predicate2(x))` 
+
+---
+
+## Advanced static-typing 
+
+* a foundation of nested class types that also allow you to 
+  * parameterize with *generics*
+  * combine types using *intersections* 
+  * hide details of types using *abstract* types 
+* all without adding verbosity and flexibility is actually gained through pattern matching and several new ways to write and compose types
+* benefits include:
+  * verifiable properties of program abstractions
+  * safe refactorings
+  * better documentation
+
+---
+
+### Verifiable properties of program abstractions
+
+* prove the absence of certain run-time errors
+* examples:
+  * booleans are never added to integers
+  * private variables are not accessed from outside their class
+  * functions are applied to the correct number of arguments
+  * only strings are added to a set of strings
+* cannot, however, replace unit testing of things like non-terminating functions, array-bounds violations, divisions by zero
+* can reduce the number of unit tests needed to be written
+* unit testing can only prove the presence of errors, not their absence, hence the benefit of static-typing
+
+---
+
+### Safe refactorings
+
+* safety net that allows you to make changes to a codebase (refactor) with a high degree of confidence
+* e.g. add another parameter to a method. Re-compile and simply fix all lines that cause a type error.
+* same holds for method name changes, moving methods from one class to another 
+
+---
+
+### Better documentation
+
+* a type annotation can never be out of date documentation
+* compilers and IDEs can use type annotations for contextual help (e.g. display all available members)
+* Scala type inference system lets you omit annoying type information cruft
+
+Example:  These two are equivalent, but one is less crufty
+
+```
+val x: HashMap[Int, String] = new HashMap[Int, String]() // cruft
+
+val x = new HashMap[Int, String]() // no cruft
+```
+
+* client app code can harness conciseness, but often libraries themselves have to be necessarily verbose and explicitly given because they define the contract between component and client
+
+---
+
+# The scala interpreter
+
+* an interactive "shell" for writing scala expressions and programs
+* once you have scala installed and on the path, simply type `scala` at the command prompt
+* from there, you simply type a scala expresion at the prompt and it will evaluate the expression and print the result
+* the result includes an automatically generated or user defined name, a colon followed by the type, an equal sign and then the result value. 
+* the *resX* identifier can be used in later lines
+* all of java's primitive types have corresponding classes in Scala e.g. scala.Float
+* you can exit the interpreter with `:quit` or `:q`
+
+```
+scala> 1 + 2
+res0: Int = 3 
+scala> res0 * 3
+res1: Int = 9
+scala> println("Hello, world!")
+Hello, world!
+```
+
+---
+
+# Variables
+
+* two types:
+  * `val` -- final variable, cannot be reassigned
+  * `var` -- can be reassigned
+* uses type inference -- scala figures out types you leave off, implicit
+* specify type explicitly only when it might be ambiguous or is good documentation
+
+```
+scala>val msg = "Hello, world!"
+scala>val msg2: String = "Hello again, world!"
+scala>println(msg)
+Hello, world!
+scala> msg = "Goodbye, cruel world!"
+<console>:5: error: reassignment to val
+scala> var greeting = "Hello, world!"
+scala> greeting = "Goodbye, cruel world!"
+scala>val multiline = 
+"This is the next line."
+```
+
+---
+
+# Functions
+
+* function parameter types are not inferred
+* after the parameter list you have the return type, which can be left out if the compiler can infer it
+* after that its `= {}` with the function body in between. If its just one line, you can leave out the `{}`
+* sometimes the compiler will require you to specify the result is a function (e.g. recursive)
+* empty parentheses mean the function takes no parameters
+* a result type of Unit indicates the function returns no interesting value, and are only executed for their side effects
+
+```
+scala>def max(x: Int, y: Int): Int = { if(x > y) x else y }
+max: (x: Int, y: Int)Int
+scala>max(5,10)
+res0: Int = 10
+scala>def greet() = println("Hello, world!")
+greet: ()Unit
+scala>greet()
+Hello, world!
+```
+
+
+
+
+
+    </textarea>
+    <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
+    <script>
+      var slideshow = remark.create();
+    </script>
+  </body>
+</html>
