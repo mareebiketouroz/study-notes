@@ -23,6 +23,11 @@ class: center, middle
 
 # Scala
 
+### adapted from "Programming in Scala, First Edition"
+#### by Martin Odersky, Lex Spoon, and Bill Venners
+#### December 10, 2008
+##### available at: http://www.artima.com/pins1ed/
+
 ---
 
 # Topics
@@ -30,6 +35,7 @@ class: center, middle
 1. What is Scala
 2. What makes it scalable?
 3. Why use it?
+4. Getting started with Scala
 
 ---
 
@@ -167,7 +173,18 @@ val x = new HashMap[Int, String]() // no cruft
 
 ---
 
-# The scala interpreter
+# Getting started with Scala ...
+
+* the scala interpreter
+* variables
+* functions
+* writing and running scripts
+* Loop with while, decide with if, iterate with foreach and for
+
+
+---
+
+## The scala interpreter
 
 * an interactive "shell" for writing scala expressions and programs
 * once you have scala installed and on the path, simply type `scala` at the command prompt
@@ -188,7 +205,7 @@ Hello, world!
 
 ---
 
-# Variables
+## Variables
 
 * two types:
   * `val` -- final variable, cannot be reassigned
@@ -211,7 +228,7 @@ scala>val multiline =
 
 ---
 
-# Functions
+## Functions
 
 * function parameter types are not inferred
 * after the parameter list you have the return type, which can be left out if the compiler can infer it
@@ -231,9 +248,525 @@ scala>greet()
 Hello, world!
 ```
 
+---
+
+## Writing and running scripts
+
+* edit script in your favourite editor or IDE
+* file extension `.scala`
+* on the command line `scala <scriptname>`
+* command line args:
+  * `scala helloname.scala Maree`
+  * available from the `args` array in scripts e.g. `println("Hello, " + args(0) + "!")`
+* comments are `//` or `/* .. */`
+* string concatenation with `+`
+* `print` prints without the line return
+* you can also use the 'pound-bang' syntax to save typing `scala` when running scripts. See http://www.artima.com/pins1ed/scala-scripts-on-unix-and-windows.html
+
+---
+
+## Loop with while, decide with if, iterate with foreach and for
 
 
+```
+while (condition) {
+  if(condition) do something
+  else do something else
+}
 
+// 3 ways of doing the same thing
+args.foreach(arg => println(arg))
+args.foreach((arg: String) => println(arg))
+args.foreach(println) // partially applied function shorthand
+```
+
+* the syntax for a function literal is...
+  - `(x: Int, y: Int) => x + y`
+  - or `(function parameters) =>` (right arrow) `<function body>`
+
+
+```
+for(arg <- args) println(arg) // you can also replace <- with 'in'
+```
+---
+
+# More advanced Scala
+
+* parametize arrays with types
+* lists
+* tuples
+* sets and maps
+* recognise functional style
+* read a file
+
+---
+
+## Parametize (configure) arrays with types 
+
+* instantiate objects with `new`
+* parametize an instance by passing an object e.g. `val big = new BigInteger("12345")`
+* parametize an instance with types e.g. 
+
+```
+val greetStrings = new Array[String](3)
+greetStrings(0) = "Hello" // compiler translates this to calls to the update method 
+greetStrings(1) = ", "
+greetStrings(2) = "world!"
+// more concise, calls factory method apply
+val greetStrings2 = Array[String]("Hello", ", ", "world!")
+// even more concise, compiler infers string type 
+val greetStrings3 = Array("Hello", ", ", "world!") 
+```
+---
+
+## Lists
+* another benefit of "No side effects" approach everything that goes in/comes out is type checked, so logic errors are more likely to manifest themselves as type errors
+* arrays are mutable objects (their contents, not their lengths), which means, side effects can happen
+* immutable `scala.List` enable functional style of programming
+
+```
+val list1 = List(1,2)
+val list2 = List(3,4)
+// ::: is list concat method
+val list3 = list1 ::: list2
+// :: pronounced 'cons', it prepends a new element to the beginning of an existing 
+val list4 = 1 :: List(2,3) 
+```
+* if a method name ends in a colon, the method is invoked on the *right* operand
+---
+
+### Some list methods and usages
+
+| List method | Usage |
+| ----------- | ----- |
+| `List()` or `Nil` | The empty list |
+| `List("a","b","c")` | Creates a new `List[String](3)` with values `"a"`, `"b"`,`"c"` |
+| `val l = "a" :: "b" :: "c" :: Nil` | Creates a new `List[String](3)` with values `"a"`, `"b"`,`"c"` |
+| `List("a") ::: List("b","c")` | Concats two lists and creates a new `List[String](3)` with values `"a"`, `"b"`,`"c"` |
+| `l(3)` | Returns the element at index 2 (zero-based) of the List `l` (returns `"c"`) |
+|  `l.count(s=>s.length==4)` | Counts the number of string elements in `l` that have length 4 |
+| `l.drop(2)` | Returns `l` without the first 2 elements (returns `List("c")`) |
+| `l.dropRight(2)` | Returns `l` without the last 2 elements (returns `List("a")`) |
+| `l.exists(s=>s=="a")` | Determines whether `l` contains an element string `"a"` (returns true) |
+
+---
+
+### Some list methods and usages continued...
+
+| List method | Usage |
+| ----------- | ----- |
+| `l.filter(s=>s>"a")` | Returns a list of elements with strings greater than `"a"` (returns `List("b","c")`)|
+| `l.forall(s=>s.endsWith("l"))` | Indicates whether all elements in `l` end with the letter 'l' |
+| `l.foreach(s=>print(s))` | Prints each of the strings in `l` on the same line |
+| `l.foreach(print)` | Same as above |
+| `l.head` | Returns the first element of `l` |
+| `l.init` | Returns a list of all but the last element of `l`|
+| `l.isEmpty` | Indicates whether `l` is an empty list |
+| `l.last` | Returns the last element of `l`|
+| `l.length` | Returns the number of elements in List `l` (returns 3) |
+| `l.map(s=>s + "!")` | Appends '!' to the end of each element of `l` |
+| `l.mkString(",")` | Makes a string of the elements in `l` joined by commas. (Returns `"a,b,c"`) |
+
+---
+
+### Some list methods and usages continued...
+
+
+| List method | Usage |
+| ----------- | ----- |
+| `l.remove(s => s.length > 2)` | Returns a list of all elements except those longer than 2 characters|
+| `l.reverse` | Returns a List with elements in reverse order (returns `List("c", "b", "a")`) |
+| `l.sort(s,t) => s.charAt(0).toLowerCase < t.charAt(0).toLowerCase)` | Returns a list of elements sorted alphabetically by first character lowercase |
+| `l.tail` | Returns List `l` minus the first element |   
+
+---
+
+## Tuples
+
+* immutable (like lists)
+* can contain different types of elements (unlike lists)
+* useful for returning more than object from a method
+* placed in parentheses, separated by commas
+* access elements with `._<one-based-index>` 
+* one-based because it is traditional for statically typed tuples in other languages
+```
+val pair = (99, "Luftballoons")
+println(pair._1)
+println(pair._2)
+```
+---
+
+## Sets and maps
+* in Java you "implement" interfaces, in Scala you "extend" or "mix in" traits
+* the scala API contains a base *trait* for sets/maps and then two *sub-traits*: one for mutable sets/maps and the other for immutable sets/maps. They're all called Set/Map but their fully qualified names differ (different packages)
+
+```
+var jetset = Set("Boeing", "Airbus") // implied immutable set created
+jetSet += "Lear"  // returns a new set with three elements
+
+// create a mutable set
+import scala.collection.mutableSet
+val movieSet = Set("Hitch", "Poltergeist")
+movieSet += "Shrek" // += is an actual method defined on mutable sets
+// movieSet.+="Shrek" // equivalent
+
+// specify set
+import scala.collection.immutable.HashSet
+val hashSet = HashSet("Tomatoes", "Chillies")
+
+import scala.collection.mutable.Map
+val treasureMap = Map[Int, String]() // empty
+treasureMap += (1 -> "Go to island.") // add key/value pairs
+treasureMap += (2 -> "Find big X on ground.")
+treasureMap += (3 -> "Dig.")
+
+val romanNumeral = Map(1 -> "I", 2 -> "II", 3 -> "III", 4 -> "IV", 5 -> "V")
+```
+---
+
+## Learning the functional style
+
+* scala encourages you to lean towards vals rather than vars, but ultimately reach for the best tool given the job at hand
+* consider (or refactor to) alternatives that are:
+  * functional, 
+  * clearer, 
+  * more concise, 
+  * easier-to-read
+  * less-error-prone
+* example; instead of using a `while` loop and `var`, consider:
+  * `for(item <- items)` or 
+  * `items.foreach(method)`
+* for truely functional code, try to produce methods that:
+  * have no side-effects, 
+  * use immutable, and 
+  * use vals rather than vars
+* but sometimes they are necessary so don't sweat it 
+* Scala is hybrid imperitive/functional, and vars/side-effects aren't inherently evil
+
+---
+
+## Reading from a file
+
+```
+import scala.io.Source
+
+if(args.length > 0) {
+
+  // getLines returns Iterator[String] (including EOL char)
+  for(line <- Source.fromFile(args(0)).getLines) 
+
+    print(line.length + " " + line)
+
+} 
+
+else console.err.println("Please enter a filename") 
+
+```
+---
+# Classes and objects
+
+* classes, fields and methods
+* semicolon inference
+* singleton objects
+* an example application
+* the Application trait
+---
+## Classes, fields and methods
+
+```
+class ChecksumAccumulator {
+  private var sum = 0 
+  // if you wanted to make this public you'd just put nothing
+  // as public is default
+
+  def add(b: Byte) { sum+=b }
+  // methods of type unit are executed for their side effects
+  // generally I/O or changing state of an object outside the method
+  // we make it look like a procedure to make this clear
+
+  // NOTE: if you intend to return a value, don't forget the equals sign
+  // because if the method is implied Unit return the value will be lost
+
+  def checksum(): Int = ~(sum & OxFF) + 1
+  // note: params are vals, not vars, 
+  // attempts to reassign / change value will give compile errors
+  // return statement is superfluous and can be dropped
+}
+
+val acc1 = new ChecksumAccumulator
+val acc2 = new ChecksumAccumulator
+
+acc1.sum = 3 // won't compile as sum is private 
+```
+
+---
+## Semicolon inference
+* semicolon is optional, unless you want multiple statements on a single line
+* it is common to put chaining operators at the end of the line
+
+### The rules of semicolon inference are suprisingly simple
+A line ending is treated as a semicolon unless one of the following conditions is true:
+1. the line ends in a word not legal at the end, e.g. infix operator or period
+2. the next line begins with a word not legal to start a statement
+3. line ends within parentheses or square brackets
+---
+## Singleton objects
+
+* Classes in scala cannot have static members, instead it has *Singleton objects*
+* defined with keyword `object`
+* when a singleton object shares the same name with a class, it is called it's *companion object*, and you define both in the same source file (The class is called the *companion class* of the singleton object)
+* the class and its companion object can access each others private members
+* the type is defined by the companion class 
+* singleton objects is an instance of its superclasses and mixed in traits, so you can invoke methods via these types, refer to it from variables of these types, and pass it methods expecting these types
+* one difference between classes and singleton objects is that singleton objects cannot take parameters (or even invoke it with `new`), whereas classes can
+* each singleton object is an instance of a *synthetic class* referenced from a static variable (init the first time code accesses it)
+* a singleton that doesn't share same name as companion class is a *standalone object*, good for utility methods or defining an application entry point  
+---
+
+### Singleton object example
+
+```
+// in file ChecksumAccumulator.scala
+class ChecksumAccumulator {
+  private var sum = 0 
+  def add(b: Byte) { sum+=b }
+  def checksum(): Int = ~(sum & OxFF) + 1
+}
+
+import scala.collection.mutable.Map
+object ChecksumAccumulator {
+  private val cache = Map[String, Int]()
+  def calculate(s:String): Int = 
+    if(cache.contains(s)) cache(s)
+    else {
+      val acc = new ChecksumAccumulator
+      for(c<-s) acc.add(c.toByte)
+      val cs = acc.checksum()
+      cache += (s -> cs)
+      cs
+  }
+}
+```
+---
+## Example application
+```
+// in file ChecksumAccumulator.scala
+class ChecksumAccumulator {
+  private var sum = 0 
+  def add(b: Byte) { sum+=b }
+  def checksum(): Int = ~(sum & OxFF) + 1
+}
+
+import scala.collection.mutable.Map
+object ChecksumAccumulator {
+  private val cache = Map[String, Int]()
+  def calculate(s:String): Int = 
+    if(cache.contains(s)) cache(s)
+    else {
+      val acc = new ChecksumAccumulator
+      for(c<-s) acc.add(c.toByte)
+      val cs = acc.checksum()
+      cache += (s -> cs)
+      cs
+  }
+}
+
+// in file ExampleApp.scala
+import ChecksumAccumulator.calculate
+object ExampleApp {
+  def main(args: Array[String]) {
+    for (arg <- args)
+      println(arg + ": " + calculate(arg))
+  }
+}
+```
+
+---
+
+### Example app notes
+
+* in scala you can name the file whatever you want, but its good practice to name them after the class they contain!
+* scripts must end in a result expression, e.g. you can't run ExampleApp as a script
+* classes and apps need to be compiled:
+  * with scalac: `scalac ChecksumAccumulator.scala ExampleApp.scala` 
+  * or if you are in a hurry, use fast scala compiler fsc compiler daemon: `fsc ChecksumAccumulator.scala ExampleApp.scala`
+* the first time you run fsc it will start up the daemon; if you ever want to stop it: `fsc -shutdown`
+* once you've done this, `scala ExampleApp this is a test string` to run the example app 
+---
+## the Application trait
+
+* to save some typing, mix in the trait scala.Application
+
+```
+import ChecksumAccumulator.calculate
+object ExampleApp extends Application {
+    for(word <- List("This","will","destroy","you")) 
+      println(word + ": " + calculate(word))
+}
+```
+
+* instead of writing a main method, simply place the code you would have put in the main method directly in the curly braces -- scalac does the rest!
+* however you can't use this if:
+  * you want to access command line args
+  * for multi-threaded apps
+  * if the app is complicated as some JVMs don't optimize this well
+* only use Application trait if your app is simple and single threaded
+
+---
+
+# Basic types and operations
+
+* some basic types
+* literals
+* operators are methods
+* arithmetic operators
+* relational and logic operators
+* bitwise operators
+* object equality
+* operator precedence and associativity
+* rich wrappers
+
+---
+
+## Some basic types, and literals
+
+| Type    | Description                            | Package   |
+| ------- | -------------------------------------- | --------- |
+| Byte    | -2^7 to 2^7 minus 1 (8 bit signed)     | scala     |
+| Short   | -2^15 to 2^15 minus 1 (16 bit signed)  | scala     |
+| Int     |-2^31 to 2^31 minus 1 (32 bit signed)   | scala     |
+| Long    | -2^63 to 2^63 minus 1 (64 bit signed)  | scala     |
+| Char    | 16 bit unsigned unicode                | scala     |
+| String  | sequence of chars                      | java.lang |
+| Float   | 32 bit IEEE 754 single-precision float | scala     |
+| Double  | 32 bit IEEE 754 double-precision float | scala     |
+| Boolean | true or false                          | scala     |
+
+* you can use lowercase, but the wacky community decided to vote for lowercase aliases to be deprecated or removed in future so best practice to use uppercase
+* same as corresponding types in Java
+* these basic types can be written as literals (write a constant value directly in code), same syntax as Java
+
+---
+## Literals
+
+### Integer literals
+
+```
+val aHexadecimal = 0xcafebabe // scala always prints them in base 10
+val anOctal = 0777 // begins with a zero digit
+val aDecimal = 31 // begins with a non-zero digit and is otherwise undecorated
+val aLong = OxCAFEBABEL // could also end with lowercase L
+val aShort: Short = 367
+val aByte: Byte = 38
+```
+
+### Floating point literals
+```
+val aDouble = 1.2345
+val aDouble2 = 1.2345e1 // exponent, the power of 10 which the other portion is multiplied
+val aDouble3 = 1.23E45D // exponent also, D not required as double is default if no F
+val aFloat = 1.2345F
+val aFloat2 = 3e5f
+```
+
+---
+
+### Character literals
+```
+val aChar = 'A'
+val hexChar = '\101'
+val unicodeChar = '\u0041'
+val B\u0041\u0044 = 1 // unicode can appear anywhere in scala program, but why would you?
+val backslash = '\\' # escape sequences
+```
+| Literal | Meaning           | Unicode |
+| ------- | ----------------- | ------- |
+| \n      | line feed         | \u000A  |
+| \b      | backspace         | \u0008  |
+| \t      | tab               | \u0009  |
+| \f      | form feed         | \u000C  |
+| \r      | carriage return   | \u000D  |
+| \"      | double quote      | \u0022  |
+| \'      | single quote      | \u0027  |
+| \\      | backslash         | \u005C  |
+
+---
+
+### String literals
+
+```
+val hello = "hello"
+val escapes = "\\\"\'"
+val rawString = """Welcome to Earth
+                   Type "HELP" for help"""
+println("""|Welcome to Earth
+           |Type "HELP" for help""".stripMargin) // removes unsightly extra spaces 
+```
+
+### Symbol literals
+
+* written as `'identifier` where `identifier` can be any alphanumeric identifier
+* common example use: a record field in a database
+* symbols are *interned* which means if you write the same symbol twice, both expressions will refer to the same object
+
+### Boolean literals
+
+```
+var bool = true
+var bool2 = false
+``` 
+---
+
+## Operators are methods
+* example: class Int contains a method named + that takes an Int and returns an Int
+  * in fact, Int contains several *overloaded* + methods that take different parameter types
+* example: String has a method .indexOf that is overloaded to take either one char parameter, or a Char parameter and the index to start looking and returns the index of the first occurrence, or -1 if not found, which can either be called using dot notation or on its own
+* any method can be an operator
+* infix operators take two operands: One to the left and one to the right
+
+```
+var sum = 1 + 2
+var sum = (1).+(2)
+
+var s = "Hello, world!"
+s.indexOf('o')
+s indexOf 'o' // infix
+s.indexOf('o',5)
+s indexOf ('o',5)
+``` 
+---
+
+### Prefix and postfix
+
+* prefix and postfix operators are unary: they take just one operand
+* prefix notation -- the operand is to the right of the operator
+* prefix operator examples:
+  * -2.0 // invokes Double.unary_-
+  * !found // invokes Boolean.unary_!
+  * ~0xFF // invokes .unary_~
+* the only identifiers that can be used as prefix operators are +,-,! and ~ (even if you try to define something like unary_*, it just won't work because its not one of these special four)
+* postfix operators are methods that take no arguments when they are invoked without a dot or parentheses
+* in scala you can leave off the empty parentheses
+* by convention you include parentheses if the method has side effects e.g. println, but leave off if no side effects such as toLowerCase
+
+---
+
+## Arithmetic operators
+
+* +, -, *, /, % (remainder)
+* scala.Math.IEEEremainder
+
+---
+
+## Relational and logic operators
+---
+## Bitwise operators
+---
+## Object equality
+---
+## Operator precedence and associativity
+---
+## Rich wrappers
 
     </textarea>
     <script src="https://gnab.github.io/remark/downloads/remark-latest.min.js"></script>
