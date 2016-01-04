@@ -1,0 +1,35 @@
+What are two of the features that made Hadoop unique?	1. Move computation to data<div>2. Scalability at its core -- distributed on cheap hardware</div>
+What was Hadoop named after?	Doug Cutting's child's toy elephant
+What was HDFS based on?	GFS (google file system)<br />
+What is Hadoop?	An open stack framework that allows plug in tools which facilitates large scale storage and processing using clusters
+What are some benefits of Hadoop?	- simple, powerful and very efficient<div>- scalability at its core (distributed, cheap hardware)</div><div>- reliability (fault tolerant)</div><div>- schema-on-read</div><div>- allows new kinds of analysis</div><div>- more data with simple analytics can give a better result</div>
+What is meant by schema-on-read?	You project the data into a schema on the fly (instead of defining a schema before any data can even be imported e.g. RDBM)
+Who developed Hadoop?	Doug Cutting and Mike Cafarella in 2005 (Yahoo, Cloudera)
+What are the 4 basic components of Hadoop?	1. Hadoop common<div>2. HDFS</div><div>3. YARN</div><div>4. MapReduce</div>
+What is HDFS?	- Hadoop Distributed File System<div>- distributed, scalable, portable file system</div><div>- written in Java</div>
+What are the components of the HDFS?	Namenode and Datanodes
+What is the purpose of the Namenode in HDFS?	Holds metadata
+What is the purpose of datanodes in HDFS?	They hold blocks of data. Datanodes operate in clusters, and what blocks each hold is held by the namenode as metadata. Each block of data is replicated across multiple datanodes for reliability.
+What is the benefit of replicating data across datanodes in HDFS?	Reliability without the need for RAID (redundant array of inexpensive/independent disks)
+What is the purpose of the secondary namenode?	The secondary namenode on HDFS takes snapshots of Namenodes metadata
+What other reliability characteristics does HDFS namenode allow?	Heartbeats, replication and balancing
+What layer sits on top of HDFS in Hadoop?	Some version of a MapReduce
+What does a MapReduce consist of?	1. A job tracker (sits on Master)<div>2. A task tracker (sits on nodes/slaves)</div>
+What is another name for MRV2?	MapReduce version 2 is also called YARN
+What does YARN stand for?	Yet Another Resource Negotiator
+What does YARN replace?	MapReduce
+What changes did YARN bring about?	Split resource management (Scheduling) and MapReduce into two separate daemons
+What benefits does YARN bring?	- scalability<div>- MapReduce compatibility</div><div>- Improved cluster utilization</div>
+What benefits does YARN bring with regards to improved cluster utilization?	- capacity<div>- guarantees</div><div>- fairness</div><div>- SLAs</div><div>- supported other workloads, not just MapReduce e.g. machine learning</div><div>- multiple access engines - batch and streaming</div>
+What does Sqoop stand for?	"""SQL to Hadoop"""
+What is Apache Sqoop?	A command line tool designed for efficiently transferring bulk data between Apache Hadoop and structured datastores such as relational databases
+Does sqoop allow you to import individual tables or entire databases?	Sqoop allows you to import individual tables or even entire databases
+What does Apache Sqoop do when you import data?	Apache Sqoop generates java classes that allow you to interact with imported data
+In terms of the Hadoop stack, what does Scoop allow?	It gives you the ability to import SQL databases straight into Hive
+How do you import data with Sqoop?	Set up an import job and scoop
+Describe HBase	- a column-oriented database management system<div>- key-value store</div><div>- based on Google bigtable</div><div>- holds extremely large data</div><div>- dynamic data model, not RDBMS</div>
+Describe Pig	- scripting language Pig Latin&nbsp;<div>- high level programming on top of Hadoop MapReduce</div><div>- data analysis problems as data flows</div><div>- originally developed by Yahoo 2006</div><div>- languages include JRuby, JPython, Java</div><div>- can run pig scripts in other languages also</div><div>- Pig for ETL - extract, transform according to rules, load into a data store via UDF (user defined functions)</div>
+Describe Hive	- data warehouse software facilities querying and managing large datasets residing in distributed storage<div>- projects structure on top of all of this data and allows us to use SQL-like querys with HiveQL</div><div>- can also plug in MapReduce if the query would be too complex otherwise</div>
+Describe Oozie	- workflow scheduler system to manage Hadoop jobs<div>- oozie workflow jobs are DAGs (Directed, acyclic graphs)</div><div>- oozie coordinator jobs are recorrent oozie workflow jobs that are triggered by frequency or data availability</div><div>- very scalable and reliable and extensible</div>
+Describe Zookeeper	- provides operational services for a hadoop cluster<div>- centralized service for maintaining config info, naming, providing distributed synchronization and naming</div><div>- distributed configuration service, job synchronisation service, and a naming registry for the entire distributed system</div><div>- distrubuted systems use zookeeper to store updates to important config info on the cluster itself</div>
+Describe Flume	- distrubuted, reliable and available service for efficiently collecting, aggregating and moving large amounts of data<div>- simple, flexible architecture based on streaming data flows</div><div>- robust, fault tolerant</div><div>- tunable to enhanced reliability mechanisms, failover, recovery --&gt; keep cluster safe and reliable</div><div>- uses simple extensible data model that allows us to apply all kinds of online analytic applications</div>
